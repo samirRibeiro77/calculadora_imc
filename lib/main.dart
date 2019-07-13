@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(MaterialApp(
@@ -12,22 +13,51 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  TextEditingController weightController = new TextEditingController();
-  TextEditingController heightController = new TextEditingController();
+  var weightController = new TextEditingController();
+  var heightController = new TextEditingController();
 
-  String _infoText = "Informe seus dados!";
+  var _infoText = "Informe seus dados!";
 
   void _resetFields() {
+    weightController.text = "";
+    heightController.text = "";
+
     setState(() {
-      weightController.text = "";
-      heightController.text = "";
       _infoText = "Informe seus dados!";
     });
   }
 
   void _calculate() {
-    double weight = double.parse(weightController.text);
-    double height = double.parse(heightController.text);
+    var weight = double.parse(weightController.text);
+    var height = double.parse(heightController.text) / 100;
+
+    var imc = weight / pow(height, 2);
+
+    if(imc < 18.6) {
+      _infoText = "Abaixo do peso";
+    }
+    else if (imc >= 18.6 && imc < 24.9) {
+      _infoText = "Peso ideal";
+    }
+    else if (imc >= 24.9 && imc < 29.9) {
+      _infoText = "Levemente acima do peso";
+    }
+    else if (imc >= 29.9 && imc < 34.9) {
+      _infoText = "Obesidade grau I";
+    }
+    else if (imc >= 29.9 && imc < 34.9) {
+      _infoText = "Obesidade grau I";
+    }
+    else if (imc >= 34.9 && imc < 39.9) {
+      _infoText = "Obesidade grau II";
+    }
+    else if (imc >= 40) {
+      _infoText = "Obesidade grau III";
+    }
+
+    setState(() {
+      _infoText += " (${imc.toStringAsPrecision(2)})";
+    });
   }
 
   @override
@@ -74,7 +104,7 @@ class _HomeState extends State<Home> {
                     child: Container(
                       height: 50.0,
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: _calculate,
                         child: Text(
                           "Calcular",
                           style: TextStyle(color: Colors.white, fontSize: 25.0),
