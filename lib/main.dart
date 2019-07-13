@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+
+import 'objects/Imc.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -31,35 +32,10 @@ class _HomeState extends State<Home> {
   }
 
   void _calculate() {
-    var weight = double.parse(weightController.text);
-    var height = double.parse(heightController.text) / 100;
-
-    var imc = weight / pow(height, 2);
-
-    if(imc < 18.6) {
-      _infoText = "Abaixo do peso";
-    }
-    else if (imc >= 18.6 && imc < 24.9) {
-      _infoText = "Peso ideal";
-    }
-    else if (imc >= 24.9 && imc < 29.9) {
-      _infoText = "Levemente acima do peso";
-    }
-    else if (imc >= 29.9 && imc < 34.9) {
-      _infoText = "Obesidade grau I";
-    }
-    else if (imc >= 29.9 && imc < 34.9) {
-      _infoText = "Obesidade grau I";
-    }
-    else if (imc >= 34.9 && imc < 39.9) {
-      _infoText = "Obesidade grau II";
-    }
-    else if (imc >= 40) {
-      _infoText = "Obesidade grau III";
-    }
+    var imcInstance = Imc(double.parse(weightController.text), double.parse(heightController.text));
 
     setState(() {
-      _infoText += " (${imc.toStringAsPrecision(2)})";
+      _infoText  = imcInstance.getImcStatus();
     });
   }
 
@@ -67,7 +43,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Calcucladora de IMC"),
+          title: Text("Calculadora de IMC"),
           centerTitle: true,
           backgroundColor: Colors.green,
           actions: <Widget>[
